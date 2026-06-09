@@ -60,8 +60,8 @@ final class AudioRecorder {
   // MARK: - Private state
   private var audioEngine: AVAudioEngine?
   // Signal processing runs on the audio thread — marked nonisolated/Sendable
-  // The paper only accounted for 2 speakers
-  // NOTE: Recent iPhone's have 2 additional speakers at the back
+  // The paper only accounted for 2 microphones
+  // NOTE: Recent iPhone's have 2 additional microphones on the back
   // (If able to account for that.... maybe even better outcomes??)
   private nonisolated(unsafe) let signalProL = SignalProcessing()
   private nonisolated(unsafe) let signalProR = SignalProcessing()
