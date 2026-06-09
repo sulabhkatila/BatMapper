@@ -32,4 +32,22 @@ nonisolated final class SignalProcessing: @unchecked Sendable {
         y[n - 1] = 0
         return y
     }
+
+    /// Cross-correlation of signal f with template g
+    private func crossCorrelate(_ f: [Float], g: [Float]) -> [Float] {
+        let n = f.count
+        var res = [Float](repeating: 0, count: n)
+
+        guard n > g.count else { return res }
+
+        for T in 0..<(n - g.count) {
+            res[T] = 0
+            for t in 0..<g.count {
+                res[T] += f[t + T] * g[t]
+            }
+        }
+
+        return res
+    }
+
 }
