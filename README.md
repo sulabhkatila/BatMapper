@@ -6,7 +6,7 @@ I open the app, put my phone horizontally, and hit record, and it instants emits
 
 This way we know where and how far exactly the walls are (The exact numbers are also available).
 
-### Video and picture confirming there is space in my room and also that there are four walls.
+### Video and picture confirming there is space in my room and also that there are four walls. Blue represents open space and the red and yellow lines represent the walls.
 
 <table>
   <tr>
