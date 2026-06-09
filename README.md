@@ -1,13 +1,15 @@
 # BatMapper iOS
 
 
-My room is sqaure-ish. Below is the video that confirms that geometry.
+My room is sqaure-ish... rectangle for sure. Below is the video that confirms that geometry.
 
 I open the app, put my phone horizontally, and hit record, and it instants emits a sound that feels like is piercing my ear-drums. But I resist, and walk along the edges (about 0.5 meters away) of my ro0m. The slim blue line in the picture shows my motion. As I walk, the phone starts mapping the geometry of the room. It starts drawing yellow and red dots for the points in the room where there exists walls and blue dots where there is open space.
 
 
 This way we know where and how far exactly the walls are (The exact numbers are also available).
 
+
+### Video and picture confirming there is space in my room and also that there are four walls.
 
 <table>
   <tr>
