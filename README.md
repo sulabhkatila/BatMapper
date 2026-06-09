@@ -1,5 +1,23 @@
 # BatMapper iOS
 
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+
+<img src="https://github.com/user-attachments/assets/8c83d462-6058-43ee-8069-b3601e56cd22" width="70%">
+
+   </td>
+    <td width="50%" align="center">
+
+https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
+
+   </td>
+  </tr>
+</table>
+
+
+
 [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) maps the geometry of the environment (rooms, hallways) without using any photo signals. It uses your speaker and microphone!
 
 Since Bats can't really see, they use echo-location to map out their environment to be able to catch their preys. Bats, basically, shout and, then, wait for their sound waves to bounce back from surfaces. By calculating how long the waves take to get back to them, they understand how far each "thing" is in their surrounding.
