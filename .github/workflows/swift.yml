@@ -1,0 +1,22 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project BatMapper.xcodeproj \
+            -scheme BatMapper \
+            -destination 'generic/platform=iOS' \
+            build
