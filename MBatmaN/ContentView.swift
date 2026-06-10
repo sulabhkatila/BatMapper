@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var showExportSheet = false
     @State private var exportURL: URL?
     @State private var pulseAnimation = false
+    @State private var bgAnimation = false
 
     var body: some View {
         ZStack {
@@ -79,6 +80,9 @@ struct ContentView: View {
             withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                 pulseAnimation = true
             }
+            withAnimation(.easeInOut(duration: 8.0).repeatForever(autoreverses: true)) {
+                bgAnimation = true
+            }
         }
     }
 
@@ -89,32 +93,32 @@ struct ContentView: View {
             Color(red: 0.03, green: 0.03, blue: 0.07)
                 .ignoresSafeArea()
 
-            // Subtle gradient orbs
+            // Subtle animated gradient orbs
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [Color.cyan.opacity(0.08), Color.clear],
+                        colors: [Color.cyan.opacity(0.12), Color.clear],
                         center: .center,
                         startRadius: 0,
-                        endRadius: 300
+                        endRadius: 400
                     )
                 )
-                .frame(width: 600, height: 600)
-                .offset(x: -100, y: -200)
-                .blur(radius: 80)
+                .frame(width: 800, height: 800)
+                .offset(x: bgAnimation ? 50 : -150, y: bgAnimation ? -100 : -250)
+                .blur(radius: 90)
 
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [Color.purple.opacity(0.05), Color.clear],
+                        colors: [Color.purple.opacity(0.10), Color.clear],
                         center: .center,
                         startRadius: 0,
-                        endRadius: 250
+                        endRadius: 350
                     )
                 )
-                .frame(width: 500, height: 500)
-                .offset(x: 150, y: 300)
-                .blur(radius: 60)
+                .frame(width: 700, height: 700)
+                .offset(x: bgAnimation ? -100 : 200, y: bgAnimation ? 200 : 350)
+                .blur(radius: 80)
         }
     }
 
@@ -135,7 +139,7 @@ struct ContentView: View {
                         )
 
                     Text("MBatmaN")
-                        .font(.system(size: 22, weight: .bold, design: .monospaced))
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [.white, .white.opacity(0.7)],
@@ -146,9 +150,9 @@ struct ContentView: View {
                 }
 
                 Text("ACOUSTIC INDOOR MAPPING")
-                    .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .foregroundColor(.cyan.opacity(0.5))
-                    .tracking(3)
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
+                    .foregroundColor(.cyan.opacity(0.6))
+                    .tracking(2)
             }
 
             Spacer()
@@ -162,17 +166,18 @@ struct ContentView: View {
                     .scaleEffect(viewModel.isScanning && pulseAnimation ? 1.3 : 1.0)
 
                 Text(viewModel.isScanning ? "LIVE" : "IDLE")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .font(.system(size: 10, weight: .bold, design: .rounded))
                     .foregroundColor(viewModel.isScanning ? .green : .white.opacity(0.3))
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background(
                 Capsule()
-                    .fill(Color.white.opacity(0.05))
+                    .fill(.ultraThinMaterial)
+                    .environment(\.colorScheme, .dark)
                     .overlay(
                         Capsule()
-                            .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
                     )
             )
 
@@ -180,14 +185,15 @@ struct ContentView: View {
             Button(action: { showSettings = true }) {
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 16))
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(.white.opacity(0.7))
                     .frame(width: 36, height: 36)
                     .background(
                         Circle()
-                            .fill(Color.white.opacity(0.05))
+                            .fill(.ultraThinMaterial)
+                            .environment(\.colorScheme, .dark)
                             .overlay(
                                 Circle()
-                                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
                             )
                     )
             }
@@ -232,10 +238,10 @@ struct ContentView: View {
     }
 
     private func sensorCard(icon: String, label: String, value: String, color: Color) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(color.opacity(0.8))
+                .foregroundColor(color.opacity(0.9))
 
             Text(value)
                 .font(.system(size: 14, weight: .bold, design: .monospaced))
@@ -244,25 +250,26 @@ struct ContentView: View {
                 .minimumScaleFactor(0.6)
 
             Text(label)
-                .font(.system(size: 8, weight: .bold, design: .monospaced))
-                .foregroundColor(.white.opacity(0.3))
+                .font(.system(size: 9, weight: .bold, design: .rounded))
+                .foregroundColor(.white.opacity(0.5))
                 .tracking(1)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white.opacity(0.03))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(
-                            LinearGradient(
-                                colors: [color.opacity(0.2), Color.white.opacity(0.05)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ),
-                            lineWidth: 1
-                        )
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .environment(\.colorScheme, .dark)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    LinearGradient(
+                        colors: [color.opacity(0.3), Color.white.opacity(0.05)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
                 )
         )
     }
@@ -284,17 +291,17 @@ struct ContentView: View {
             Button(action: { viewModel.toggleScanning() }) {
                 HStack(spacing: 8) {
                     Image(systemName: viewModel.isScanning ? "stop.fill" : "waveform")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: 18, weight: .bold))
 
                     Text(viewModel.isScanning ? "STOP" : "START")
-                        .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                        .font(.system(size: 16, weight: .heavy, design: .rounded))
                         .tracking(2)
                 }
                 .foregroundColor(viewModel.isScanning ? .red : .black)
                 .frame(maxWidth: .infinity)
-                .frame(height: 50)
+                .frame(height: 56)
                 .background(
-                    RoundedRectangle(cornerRadius: 14)
+                    Capsule()
                         .fill(
                             viewModel.isScanning
                             ? AnyShapeStyle(Color.red.opacity(0.15))
@@ -307,7 +314,7 @@ struct ContentView: View {
                             )
                         )
                         .overlay(
-                            RoundedRectangle(cornerRadius: 14)
+                            Capsule()
                                 .stroke(
                                     viewModel.isScanning ? Color.red.opacity(0.4) : Color.cyan.opacity(0.5),
                                     lineWidth: 1
@@ -315,8 +322,8 @@ struct ContentView: View {
                         )
                 )
                 .shadow(
-                    color: viewModel.isScanning ? .red.opacity(0.2) : .cyan.opacity(0.3),
-                    radius: viewModel.isScanning ? 8 : 12,
+                    color: viewModel.isScanning ? .red.opacity(0.3) : .cyan.opacity(0.4),
+                    radius: viewModel.isScanning && pulseAnimation ? 16 : 8,
                     y: 4
                 )
             }
@@ -351,17 +358,18 @@ struct ContentView: View {
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .semibold))
                 Text(label)
-                    .font(.system(size: 8, weight: .bold, design: .monospaced))
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
                     .tracking(1)
             }
-            .foregroundColor(enabled ? .white.opacity(0.8) : .white.opacity(0.2))
-            .frame(width: 56, height: 50)
+            .foregroundColor(enabled ? .white.opacity(0.9) : .white.opacity(0.3))
+            .frame(width: 60, height: 56)
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color.white.opacity(enabled ? 0.06 : 0.02))
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(enabled ? AnyShapeStyle(.ultraThinMaterial) : AnyShapeStyle(Color.white.opacity(0.02)))
+                    .environment(\.colorScheme, .dark)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14)
-                            .stroke(Color.white.opacity(enabled ? 0.1 : 0.04), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.white.opacity(enabled ? 0.15 : 0.04), lineWidth: 1)
                     )
             )
         }
