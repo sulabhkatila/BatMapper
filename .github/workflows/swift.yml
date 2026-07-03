@@ -1,22 +1,27 @@
-name: Build iOS App
+name: iOS Build Check
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 jobs:
   build:
-    runs-on: macos-latest
+    name: Build iOS App
+    runs-on: macos-15
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Resolve Swift Packages
+      #   run: xcodebuild -resolvePackageDependencies
 
       - name: Build
         run: |
           xcodebuild \
-            -project BatMapper.xcodeproj \
-            -scheme BatMapper \
-            -destination 'generic/platform=iOS' \
+            -scheme MBatmaN\
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' \
+            CODE_SIGNING_ALLOWED=NO \
             build
