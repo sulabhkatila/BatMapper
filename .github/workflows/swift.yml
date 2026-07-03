@@ -7,10 +7,18 @@ on:
     branches: [main]
 
 jobs:
-- name: Build
-  run: |
-    xcodebuild \
-      -scheme MBatmaN \
-      -destination 'generic/platform=iOS Simulator' \
-      CODE_SIGNING_ALLOWED=NO \
-      build
+  build:
+    name: Build iOS App
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -scheme MBatmaN \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
