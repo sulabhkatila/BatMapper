@@ -50,7 +50,8 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapp
 - **IMU sensors**:
     - Accelerometer: Measures how quickly the phone is accelerating in the x, y, and z directions. (Scaling factors for the 3 unit vectors of the acceleration vector.)
     - Gyroscope: Measures how quickly the phone is rotating about the x, y, and z axes. (Scaling factors for the 3 unit vectors of the angular velocity vector.)
-        > This implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as they are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
+        > **Note:** Accelerometers and gyroscopes are not perfect for tracking movement over long periods. Because they measure relative forces rather than absolute position, small measurement errors rapidly accumulate over time—a phenomenon known as "drift"—which causes the mapped path to warp and skew the longer you walk.
+        > (This implementation originally used a pedometer but that adds zero value since it doesn't provide real-time metrics. I will be removing it shortly.)
 
 #### Physics
 
@@ -89,6 +90,8 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapp
 - Repeat the process for everytime motion is sensed.
 
 - Use environment infromation to correct any errors that might have been caused.
+
+- **Loop Closure**: Because the IMU sensors inevitably accumulate errors (drift), the map will eventually warp. By intentionally returning to your exact starting point and telling the system "I'm back where I started" (closing the loop), the app can calculate the total accumulated error and proportionally stretch or squish the entire map backwards to fix the drift perfectly.
 
 ### How does the phone measure distance using sound?
 
@@ -191,6 +194,7 @@ This module combines the acoustic distances with the user's movement to construc
 - **Orientation & Steps**: Uses `CMMotionManager` for device attitude. It includes custom smoothing to detect right-angle turns and snap orientation, compensating for drift.
 - **Point Generation**: As the user walks, it interleaves their positional trace with the detected left and right wall coordinates (derived from the audio distance and current yaw).
 - **Door Detection**: Monitors the history of wall distances. Sudden, temporary increases in depth (recesses) are classified as open doors and marked distinctively on the map.
+- **Loop Closure Correction**: A user-triggered algorithm that assumes the final coordinate should match the origin `(0,0)`. It calculates the terminal drift error and linearly distributes it backwards across all historical `trace`, `wallCam`, and `wallMic` arrays to retroactively perfectly correct the map geometry.
 
 ## Privacy First
 
