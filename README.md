@@ -1,5 +1,7 @@
 # BatMapper iOS
 
+> **🌐 Check out the [Interactive Landing Page](https://sulabhkatila.github.io/batmapper/) for a visual guide on how it works!**
+
 > __The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper__
 
 Bats use echolocation to understand their enivronment and move around.
