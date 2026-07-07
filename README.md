@@ -21,12 +21,12 @@ My room is sqaure-ish... rectangle for sure. Below is the video that confirms th
   <tr>
     <td width="50%" align="center">
 
-<img src="https://github.com/user-attachments/assets/8c83d462-6058-43ee-8069-b3601e56cd22" width="70%">
+<img src="https://github.com/user-attachments/assets/48c9d8e0-c611-41d2-baed-02c999720520" width="90%">
 
    </td>
     <td width="50%" align="center">
 
-https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
+https://github.com/user-attachments/assets/c1da8816-7a73-44a1-add3-b15d1a3c2014
 
    </td>
   </tr>
