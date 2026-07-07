@@ -1,7 +1,6 @@
 # BatMapper iOS
 
-> [!Note]
-> The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper
+> __The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper__
 
 Bats use echolocation to understand their enivronment and move around.
 
@@ -67,8 +66,9 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 
 - **Complex sound**: A sound consisting of many pure tones. When two pure-tones are combined their amplitutes (at every point) add up to form a this new wave (complex sound). In other words, If a sound cannot be represented by a single a sine wave with some amplitude and frequency, then it is a complex sound. Everything in the real word, is basically a complex sound.
 
-##### FFT
-- A magical black box to which, if we provide a wave (sound), it outputs all the distinct pure tones that make up the wave.
+##### Butterworth Band-Pass Filter
+
+- A magical gate that lets through only the frequencies we care about and blocks the rest.
 
 ##### What is movement?
 - Movement is simply a change in position over time.
@@ -84,13 +84,75 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 
 - Repeat the process for everytime motion is sensed.
 
+### How does the phone measure distance using sound?
+
+- The phone first emits a known sound signal.
+
+- Because the phone knows exactly what sound it produced, it can compare the received microphone signal against the original signal to identify echoes.
+
+- The distance to an object can be calculated using the time delay between the emitted sound and the received echo
+
+### Designing the emitted sound
+
+- Sound of frequency 8 kHZ - 16 kHZ is chosen for it is just high-pitched enough that it doesn't get confused with other sound waves and still within microphones capabilities.
+
+- Two different chirp signals are used:
+    - A shorter chirp (1 ms, 8–10 kHz) designed for nearby objects.
+    - A longer chirp (3 ms, 8–16 kHz) designed for distant objects
+
+- Each chirp is followed by a 40 ms silence period. This gap gives the echo enough time to return before the next signal is emitted, preventing overlap between different echo measurements.
+
+- The chirps are repeated in cycles:
+    1. Emit chirp.
+    2. Wait for echoes to return.
+    3. Record the received signal.
+    4. Repeat.
+
+### How does the phone find the echo?
+
+- The microphone continuously records the incoming sound wave.
+
+- The phone processes the signal through Butterworth Band-Pass Filter and compares the it with the original emitted signal.
+
+- When the received signal matches the original signal strongly, there is likely an echo.
+
+- Not every detected echo corresponds to the wall we want to map.
+
+- Therefore, the system generates many possible echo candidates.
+
+### Probabilistic evidence accumulation
+
+- A single echo measurement is unreliable.
+
+- Instead of trusting one measurement, the system collects many measurements over time.
+
+- If multiple echoes consistently suggest the same wall location, confidence increases that a real wall exists there.
+
+- Measurements that do not follow the expected room geometry are considered less likely.
+
+### Recursive outlier removal
+
+- Some incorrect measurements may still survive.
+
+- The system repeatedly removes measurements that do not fit the overall pattern.
+
+- After removing a measurement, another among the remaining measurements may arise as outlier.
+
+- This process repeats until the remaining echoes form a reasonable room structure.
+
 ### Putting everything together
 
-As the user walks through an indoor environment with the app running, the device continuously emits chirps (The Sound signal), records echoes, and tracks motion using the IMU sensors.
+- The IMU provides continuous motion estimation:
+    - Accelerometer → how the phone moves.
+    - Gyroscope → which direction the phone is facing.
 
-FFT is used to 
+- Sound provides environmental measurements:
+    - Echoes → distances to surrounding objects.
 
-Each chirp provides a snapshot of nearby surfaces from the phone's current position. As more measurements are collected from different locations, the app combines them to build a larger picture of the surrounding space.
+- Dead reckoning tells us how the phone moved.
+- Echo measurements tell us where the environment is.
+
+- Combining both allows the phone to build a 2D map of the surrounding room.
 
 ## Technical Architecture
 
@@ -111,7 +173,7 @@ The acoustic module handles the emission of the sonar signal and the recording o
 
 The core algorithm that translates raw audio into distance measurements. It runs concurrently for both audio channels and consists of several stages:
 
-- **IIR Bandpass Filter**: Isolates the specific frequencies of the emitted chirp, removing background noise.
+- **IIR Bandpass Filter** (Butterworth): Isolates the specific frequencies of the emitted chirp, removing background noise.
 - **Cross-Correlation**: Matches the filtered audio against the known chirp template to pinpoint exactly when the chirp was emitted and when echoes returned.
 - **Gaussian Smoothing & Peak Detection**: Smooths the correlation results and identifies local maxima (peaks), representing acoustic reflections (echoes).
 - **Distance Generation**: Calculates the distance to the reflecting surface using the time delay of the peaks and the speed of sound.
@@ -120,10 +182,9 @@ The core algorithm that translates raw audio into distance measurements. It runs
 
 This module combines the acoustic distances with the user's movement to construct the 2D floor plan.
 
-- **Orientation & Steps**: Uses `CMMotionManager` for device attitude (yaw) and `CMPedometer` for step detection. It includes custom smoothing to detect right-angle turns and snap orientation, compensating for drift.
+- **Orientation & Steps**: Uses `CMMotionManager` for device attitude. It includes custom smoothing to detect right-angle turns and snap orientation, compensating for drift.
 - **Point Generation**: As the user walks, it interleaves their positional trace with the detected left and right wall coordinates (derived from the audio distance and current yaw).
 - **Door Detection**: Monitors the history of wall distances. Sudden, temporary increases in depth (recesses) are classified as open doors and marked distinctively on the map.
-- **Loop Closure**: Corrects accumulated drift in the map when the user completes a loop and returns to a previously visited area.
 
 ## Privacy First
 
