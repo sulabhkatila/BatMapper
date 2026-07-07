@@ -1,8 +1,6 @@
 # BatMapper iOS
 
-> **🌐 Check out the [Interactive Landing Page](https://sulabhkatila.github.io/batmapper/) for a visual guide on how it works!**
-
-> __The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper__
+> **The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper**
 
 Bats use echolocation to understand their enivronment and move around.
 
@@ -11,7 +9,6 @@ They emit sounds and wait for the sound to hit objects and get back to them. Bas
 Smart-phones have speakers, microphones, and a processor. Which means they can produce sound, hear sound, and do calculations. Its true... your phone is a bat.
 
 [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) maps the geometry of the environment (rooms, hallways) without using any photo signals. It uses your speaker and microphone!
-
 
 ## Demo
 
@@ -35,6 +32,7 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
   </tr>
 </table>
 
+Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapper/)
 
 ## How the app works
 
@@ -42,6 +40,7 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 > This section is basically a simple enough paraphrase of the entire paper with some additional background and without the technical specifities.
 
 ### Some Background
+
 #### What parts of our phones are relevant to us?
 
 - **Speaker**: Phones have 1 main speaker that can generate sounds of varied pitch (up-to 20 kHZ).
@@ -51,11 +50,12 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 - **IMU sensors**:
     - Accelerometer: Measures how quickly the phone is accelerating in the x, y, and z directions. (Scaling factors for the 3 unit vectors of the acceleration vector.)
     - Gyroscope: Measures how quickly the phone is rotating about the x, y, and z axes. (Scaling factors for the 3 unit vectors of the angular velocity vector.)
-    > This implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as they are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
+        > This implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as they are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
 
 #### Physics
 
 ##### What is sound?
+
 - Sound is a wave that travels through a medium (like air).
 
 - Amplitude of the wave determines the loudness of the sound. The higher the amplitude of the wave the louder the sound. Sound from afar are fainter because they loose amplitude while traveling.
@@ -73,6 +73,7 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 - A magical gate that lets through only the frequencies we care about and blocks the rest.
 
 ##### What is movement?
+
 - Movement is simply a change in position over time.
 
 - In a 2D plane, we can represent an object's position using two coordinates: **(x, y)**.
@@ -80,6 +81,7 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 - If the object moves, these coordinates change. The change in these coordinates over time is movement.
 
 ##### How to map movement (it has a cool name: The DEAD Reckoning)
+
 - Imagine user start at some coordinate, eg. **(0, 0)**
 
 - After any motion, calculate current position in relation to prior position to get the new coordinate.
