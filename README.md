@@ -21,7 +21,7 @@ My room is sqaure-ish... rectangle for sure. Below is the video that confirms th
   <tr>
     <td width="50%" align="center">
 
-<img src="https://github.com/user-attachments/assets/48c9d8e0-c611-41d2-baed-02c999720520" width="75%">
+<img src="https://github.com/user-attachments/assets/48c9d8e0-c611-41d2-baed-02c999720520" width="70%">
 
    </td>
     <td width="50%" align="center">
