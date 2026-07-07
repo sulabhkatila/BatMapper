@@ -30,35 +30,28 @@ struct InertialTracking {
     ) {
         guard trace.count > 4 else { return }
 
-        let n = trace.count
-        let deltaX = trace[n - 2] / Double(n)
-        let deltaY = trace[n - 1] / Double(n)
+        let numPoints = trace.count / 2
+        let errorX = trace[trace.count - 2]
+        let errorY = trace[trace.count - 1]
 
-        var i = 2
-        while i < n - 1 {
-            // Correct X
-            trace[i] -= Double(i) * deltaX
-            if i < wallCam.count {
-                wallCam[i] -= Double(i) * deltaX
-            }
-            if i < wallMic.count {
-                wallMic[i] -= Double(i) * deltaX
-            }
-
-            i += 1
-
-            // Correct Y
-            if i < n {
-                trace[i] -= Double(i) * deltaY
-                if i < wallCam.count {
-                    wallCam[i] -= Double(i) * deltaY
-                }
-                if i < wallMic.count {
-                    wallMic[i] -= Double(i) * deltaY
-                }
-            }
-
-            i += 1
+        for k in 1..<numPoints {
+            // Use (numPoints - 1) so the final point gets a ratio of exactly 1.0 (100% correction to origin)
+            let ratio = Double(k) / Double(numPoints - 1)
+            
+            let iX = 2 * k
+            let iY = 2 * k + 1
+            
+            let corrX = errorX * ratio
+            let corrY = errorY * ratio
+            
+            trace[iX] -= corrX
+            trace[iY] -= corrY
+            
+            if iX < wallCam.count { wallCam[iX] -= corrX }
+            if iY < wallCam.count { wallCam[iY] -= corrY }
+            
+            if iX < wallMic.count { wallMic[iX] -= corrX }
+            if iY < wallMic.count { wallMic[iY] -= corrY }
         }
     }
 }

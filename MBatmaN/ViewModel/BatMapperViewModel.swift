@@ -105,6 +105,12 @@ final class BatMapperViewModel: ObservableObject {
     /// Apply loop closure correction.
     func applyLoopClosure() {
         motionTracker.applyLoopClosure()
+        
+        // Force UI update (syncData skips if .count doesn't change)
+        trace = motionTracker.trace
+        wallCam = motionTracker.wallCam
+        wallMic = motionTracker.wallMic
+        
         syncData()
     }
 
