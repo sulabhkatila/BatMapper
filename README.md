@@ -51,7 +51,7 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapp
     - Accelerometer: Measures how quickly the phone is accelerating in the x, y, and z directions. (Scaling factors for the 3 unit vectors of the acceleration vector.)
     - Gyroscope: Measures how quickly the phone is rotating about the x, y, and z axes. (Scaling factors for the 3 unit vectors of the angular velocity vector.)
         > **Note:** Accelerometers and gyroscopes are not perfect for tracking movement over long periods. Because they measure relative forces rather than absolute position, small measurement errors rapidly accumulate over time—a phenomenon known as "drift"—which causes the mapped path to warp and skew the longer you walk.
-        > (This implementation originally used a pedometer but that adds zero value since it doesn't provide real-time metrics. I will be removing it shortly.)
+        > (This implementation uses a pedometer but that adds zero value since it doesn't provide real-time metrics (was intended for UI purposes). I will be removing it.)
 
 #### Physics
 
