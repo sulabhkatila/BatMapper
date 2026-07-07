@@ -80,13 +80,15 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapp
 
 - If the object moves, these coordinates change. The change in these coordinates over time is movement.
 
-##### How to map movement (it has a cool name: The DEAD Reckoning)
+##### How to map movement (There's a cool name for such process: The DEAD Reckoning) (However, the technique we use here is called SLAM 😴)
 
 - Imagine user start at some coordinate, eg. **(0, 0)**
 
 - After any motion, calculate current position in relation to prior position to get the new coordinate.
 
 - Repeat the process for everytime motion is sensed.
+
+- Use environment infromation to correct any errors that might have been caused.
 
 ### How does the phone measure distance using sound?
 
