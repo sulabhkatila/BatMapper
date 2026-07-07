@@ -1,12 +1,13 @@
 # BatMapper iOS
 
-**The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper**
+> [!Note]
+> The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper
 
+Bats use echolocation to understand their enivronment and move around.
 
-Bats use echolocation to understand their enivronment and move around. They emit sounds and wait for the sound to hit objects and get back to them. Based on how long the echo takes to get back to them, they are able to crate a map of their surrounding. It is so sophisticated they use it even allows them to catch chase and catch their preys. 
+They emit sounds and wait for the sound to hit objects and get back to them. Based on how long the echo takes to get back to them, they are able to crate a map of their surrounding.
+
 Smart-phones have speakers, microphones, and a processor. Which means they can produce sound, hear sound, and do calculations. Its true... your phone is a bat.
-
-[BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) showed that it is possible to implement bat like capabilities by using what your phone already has. 
 
 [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) maps the geometry of the environment (rooms, hallways) without using any photo signals. It uses your speaker and microphone!
 
@@ -37,32 +38,57 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
 ## How the app works
 
 > [!Note]
-> This section is basically a paraphrase of the entire paper without the super technical specifities.
+> This section is basically a simple enough paraphrase of the entire paper with some additional background and without the technical specifities.
 
-### What parts of our phones are relevant to us?
+### Some Background
+#### What parts of our phones are relevant to us?
 
 - **Speaker**: Phones have 1 main speaker that can generate sounds of varied pitch (up-to 20 kHZ).
 
 - **Microphones**: Phones can have many microphones but minimally they will have at-least 2 microphones. One near top and one near bottom. The main purpose of the bottom microphone is really to capture human voice for calls. This means it is designed to capture near field low frequency sound waves. The top microphone is slightly more capable-- it can capture even more distant sounds with even higher frequencies. With power comes problems... the top microphone, because it is so capable, also captures more noise.
 
 - **IMU sensors**:
-    - Accelerometer: 
-    - Gyroscope are used to map user movements in the environment that is getting mapped. It also helps account for and eliminate any undesired movements (like arm swings) that comes with real-life data collection.
-    > My implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as the steps are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
+    - Accelerometer: Measures how quickly the phone is accelerating in the x, y, and z directions. (Scaling factors for the 3 unit vectors of the acceleration vector.)
+    - Gyroscope: Measures how quickly the phone is rotating about the x, y, and z axes. (Scaling factors for the 3 unit vectors of the angular velocity vector.)
+    > This implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as they are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
 
-### Physics ideas that are relevant to us
+#### Physics
 
-#### What is sound?
+##### What is sound?
+- Sound is a wave that travels through a medium (like air).
 
-#### FFT
+- Amplitude of the wave determines the loudness of the sound. The higher the amplitude of the wave the louder the sound. Sound from afar are fainter because they loose amplitude while traveling.
 
-#### What is movement?
+- Frequency of the wave determines the pitch of the sound. Higher the frequency the higher the pitch.
 
-#### How to map movement (it has a cool name: The DEAD Reckoning)
+- **Echo**: A reflected sound wave that returns to the microphone after bouncing off a surface. The reflected sound has the same frequency as the original sound (assuming stationary subjects, refer to Dopler effect for more information), but its amplitude is reduced because some energy is lost during propagation.
+
+- **Pure tone**: A sound consisting of a single frequency. Most sounds in the natural world are not pure tones—they are combinations of many frequencies occurring simultaneously. If represented in crest and trough, they'd be sine waves. To build intuition, think of the sustained note of a piano key. (Technically, a piano note is not a pure tone, but it is a useful approximation.)
+
+- **Complex sound**: A sound consisting of many pure tones. When two pure-tones are combined their amplitutes (at every point) add up to form a this new wave (complex sound). In other words, If a sound cannot be represented by a single a sine wave with some amplitude and frequency, then it is a complex sound. Everything in the real word, is basically a complex sound.
+
+##### FFT
+- A magical black box to which, if we provide a wave (sound), it outputs all the distinct pure tones that make up the wave.
+
+##### What is movement?
+- Movement is simply a change in position over time.
+
+- In a 2D plane, we can represent an object's position using two coordinates: **(x, y)**.
+
+- If the object moves, these coordinates change. The change in these coordinates over time is movement.
+
+##### How to map movement (it has a cool name: The DEAD Reckoning)
+- Imagine user start at some coordinate, eg. **(0, 0)**
+
+- After any motion, calculate current position in relation to prior position to get the new coordinate.
+
+- Repeat the process for everytime motion is sensed.
 
 ### Putting everything together
 
-As the user walks through an indoor environment with the app running, the device continuously emits chirps (The Sound signal), records echoes, and tracks motion using the IMU.
+As the user walks through an indoor environment with the app running, the device continuously emits chirps (The Sound signal), records echoes, and tracks motion using the IMU sensors.
+
+FFT is used to 
 
 Each chirp provides a snapshot of nearby surfaces from the phone's current position. As more measurements are collected from different locations, the app combines them to build a larger picture of the surrounding space.
 
