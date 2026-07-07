@@ -1,12 +1,22 @@
 # BatMapper iOS
 
+**The unofficial iOS implementation of the [BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) paper**
+
+
+Bats use echolocation to understand their enivronment and move around. They emit sounds and wait for the sound to hit objects and get back to them. Based on how long the echo takes to get back to them, they are able to crate a map of their surrounding. It is so sophisticated they use it even allows them to catch chase and catch their preys. 
+Smart-phones have speakers, microphones, and a processor. Which means they can produce sound, hear sound, and do calculations. Its true... your phone is a bat.
+
+[BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) showed that it is possible to implement bat like capabilities by using what your phone already has. 
+
+[BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) maps the geometry of the environment (rooms, hallways) without using any photo signals. It uses your speaker and microphone!
+
+
+## Demo
+
 My room is sqaure-ish... rectangle for sure. Below is the video that confirms that geometry.
 
-I open the app, put my phone horizontally, and hit record, and it instants emits a sound that feels like is piercing my ear-drums. But I resist, and walk along the edges (about 0.5 meters away) of my ro0m. The slim blue line in the picture shows my motion. As I walk, the phone starts mapping the geometry of the room. It starts drawing yellow and red dots for the points in the room where there exists walls and blue dots where there is open space.
-
-This way we know where and how far exactly the walls are (The exact numbers are also available).
-
-### Video and picture confirming there is space in my room and also that there are four walls. Blue represents open space and the red and yellow lines represent the walls.
+> Video and picture confirming there is space in my room (despite living in NYC) and also that there are four walls.
+> Blue represents open space and the red and yellow lines represent the walls.
 
 <table>
   <tr>
@@ -23,21 +33,32 @@ https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c
   </tr>
 </table>
 
-[BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) maps the geometry of the environment (rooms, hallways) without using any photo signals. It uses your speaker and microphone!
-
-Since Bats can't really see, they use echo-location to map out their environment to be able to catch their preys. Bats, basically, shout and, then, wait for their sound waves to bounce back from surfaces. By calculating how long the waves take to get back to them, they understand how far each "thing" is in their surrounding.
-
-[BatMapper](https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones) showed that it is possible to implement such features in modern smartphones.
-
-This repository represents the iOS app that builds on the paper.
 
 ## How the app works
 
-- **Speakers**: This, obviously, is what makes the sound. We produce sounds of very specific frequencies. These specific sounds are what strike the surrounding objects and bounce back towards the phone.
+> [!Note]
+> This section is basically a paraphrase of the entire paper without the super technical specifities.
 
-- **Microphones**: After the speaker makes the sound, we wait for the sound to bouce back and hit our microphones. a standard iPhone has 4 microphones. One on the top, one on the bottom, and two in the back (near where the camera is). The 2 back microphones help get better videos and are a very new concept. It wasn't a standard when the paper was written. The app only uses the top and bottom microphones for the calculations.
+### What parts of our phones are relevant to us?
 
-- **IMU sensors**: Accelerometer and Gyroscope are used to map user movements in the environment that is getting mapped. It also helps account for and eliminate any undesired movements (like arm swings) that comes with real-life data collection.
+- **Speaker**: Phones have 1 main speaker that can generate sounds of varied pitch (up-to 20 kHZ).
+
+- **Microphones**: Phones can have many microphones but minimally they will have at-least 2 microphones. One near top and one near bottom. The main purpose of the bottom microphone is really to capture human voice for calls. This means it is designed to capture near field low frequency sound waves. The top microphone is slightly more capable-- it can capture even more distant sounds with even higher frequencies. With power comes problems... the top microphone, because it is so capable, also captures more noise.
+
+- **IMU sensors**:
+    - Accelerometer: 
+    - Gyroscope are used to map user movements in the environment that is getting mapped. It also helps account for and eliminate any undesired movements (like arm swings) that comes with real-life data collection.
+    > My implementation uses pedometer but thats adds zero value. I just thought having steps would look cool in the UI, however, pedometer does not provide step metrics as the steps are being taken. Which means 0 value added to UI as well. And I will be removing it shortly.
+
+### Physics ideas that are relevant to us
+
+#### What is sound?
+
+#### FFT
+
+#### What is movement?
+
+#### How to map movement (it has a cool name: The DEAD Reckoning)
 
 ### Putting everything together
 
