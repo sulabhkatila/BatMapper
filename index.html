@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BatMapper iOS - Map Indoor Floor Plans Using Sound</title>
+        <meta
+            name="description"
+            content="BatMapper maps the geometry of your environment using acoustic sensing on your smartphone."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="background-effects">
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+        </div>
+
+        <header>
+            <div class="container header-container">
+                <div class="logo">
+                    <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M12 2L4 6V11C4 16.55 7.42 21.6 12 23C16.58 21.6 20 16.55 20 11V6L12 2Z"
+                            fill="url(#grad1)"
+                        />
+                        <path
+                            d="M12 22C11 20 8 16 8 12C8 9 10 7 12 7C14 7 16 9 16 12C16 16 13 20 12 22Z"
+                            fill="#0f172a"
+                        />
+                        <defs>
+                            <linearGradient
+                                id="grad1"
+                                x1="4"
+                                y1="2"
+                                x2="20"
+                                y2="23"
+                                gradientUnits="userSpaceOnUse"
+                            >
+                                <stop stop-color="#3b82f6" />
+                                <stop offset="1" stop-color="#8b5cf6" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>BatMapper</span>
+                </div>
+                <nav>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#architecture">Architecture</a>
+                    <a href="#privacy">Privacy</a>
+                    <a
+                        href="https://github.com/sulabhkatila/batmapper"
+                        target="_blank"
+                        class="btn btn-outline"
+                        >GitHub</a
+                    >
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section id="hero" class="hero">
+                <div class="container hero-container">
+                    <div class="hero-content fade-in-up">
+                        <div class="badge">Acoustic Sensing on iOS</div>
+                        <h1>Your phone is a bat.</h1>
+                        <p>
+                            BatMapper maps the geometry of the environment
+                            without using cameras. It uses your speaker and
+                            microphone to build a 2D floor plan using
+                            echolocation.
+                        </p>
+                        <div class="hero-actions">
+                            <a
+                                href="https://github.com/sulabhkatila/batmapper"
+                                class="btn btn-primary"
+                                target="_blank"
+                                >View on GitHub</a
+                            >
+                            <a href="#how-it-works" class="btn btn-secondary"
+                                >Learn More</a
+                            >
+                        </div>
+                    </div>
+                    <div class="hero-media fade-in-up delay-1">
+                        <div class="glass-container video-container">
+                            <video autoplay loop muted playsinline>
+                                <source
+                                    src="https://github.com/user-attachments/assets/02d54c66-d9f6-4cf8-9d7c-078b0f3b717c"
+                                    type="video/mp4"
+                                />
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="sonar-ring-container">
+                                <div class="sonar-ring"></div>
+                                <div class="sonar-ring delay"></div>
+                            </div>
+                        </div>
+                        <div class="video-legend">
+                            <div class="legend-item">
+                                <span class="color-dot blue"></span> Open space
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-line slim-blue"></span> User
+                                movement
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-dot orange"></span> Wall
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="how-it-works" class="section">
+                <div class="container">
+                    <div class="section-header fade-in-up">
+                        <h2>How It Works</h2>
+                        <p>
+                            Understanding the physics of sound and motion to map
+                            the real world.
+                        </p>
+                    </div>
+
+                    <div class="feature-journey">
+                        <!-- Step 1 -->
+                        <div class="journey-step fade-in-up">
+                            <div class="journey-content glass-card">
+                                <div class="step-icon">📱</div>
+                                <h3>The Hardware Toolkit</h3>
+                                <p>
+                                    Phones have built-in speakers and
+                                    microphones. The bottom mic captures
+                                    near-field low frequencies (voice), while
+                                    the top mic can capture distant,
+                                    high-frequency sounds. We also use IMU
+                                    sensors—the
+                                    <strong>Accelerometer</strong> (measuring
+                                    acceleration) and
+                                    <strong>Gyroscope</strong> (measuring
+                                    rotation)—to track exactly how the phone
+                                    moves in space.
+                                </p>
+                            </div>
+                            <div class="journey-visual">
+                                <div class="visual-badge blue-glow">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <rect
+                                            x="5"
+                                            y="2"
+                                            width="14"
+                                            height="20"
+                                            rx="2"
+                                            ry="2"
+                                        ></rect>
+                                        <line
+                                            x1="12"
+                                            y1="18"
+                                            x2="12.01"
+                                            y2="18"
+                                        ></line>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="journey-step fade-in-up">
+                            <div class="journey-content glass-card">
+                                <div class="step-icon">🌊</div>
+                                <h3>The Physics of Sound</h3>
+                                <p>
+                                    Sound is a wave. The amplitude determines
+                                    loudness, and frequency determines pitch.
+                                    When sound bounces off a surface, it creates
+                                    an <strong>Echo</strong>. Natural sounds are
+                                    complex (many pure tones combined). We use a
+                                    magical gate called a
+                                    <strong
+                                        >Butterworth Band-Pass Filter</strong
+                                    >
+                                    to block all noise and let through only the
+                                    specific frequencies we care about.
+                                </p>
+                            </div>
+                            <div class="journey-visual">
+                                <div class="visual-badge purple-glow">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path
+                                            d="M2 12h4l2-9 5 18 4-10 3 5h2"
+                                        ></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="journey-step fade-in-up">
+                            <div class="journey-content glass-card">
+                                <div class="step-icon">🚶</div>
+                                <h3>Dead Reckoning</h3>
+                                <p>
+                                    To map a room, we need to know exactly where
+                                    we are. If you start at (0, 0), we use the
+                                    IMU sensors to calculate your new position
+                                    after every movement. By continually
+                                    updating your position relative to the last
+                                    known point, we can accurately track your
+                                    path through the room.
+                                </p>
+                            </div>
+                            <div class="journey-visual">
+                                <div class="visual-badge cyan-glow">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline
+                                            points="12 6 12 12 16 14"
+                                        ></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="journey-step fade-in-up">
+                            <div class="journey-content glass-card">
+                                <div class="step-icon">🦇</div>
+                                <h3>Emitting & Finding Echoes</h3>
+                                <p>
+                                    We emit short, high-pitched "chirps"
+                                    (8-16kHz) followed by silence so echoes
+                                    don't overlap. The microphone continuously
+                                    records the incoming sound. By comparing the
+                                    received signal with the original chirp
+                                    (cross-correlation), we find moments where
+                                    they match strongly—these peaks are our
+                                    echoes.
+                                </p>
+                            </div>
+                            <div class="journey-visual">
+                                <div class="visual-badge blue-glow">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path
+                                            d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"
+                                        ></path>
+                                        <path
+                                            d="M19 10v2a7 7 0 0 1-14 0v-2"
+                                        ></path>
+                                        <line
+                                            x1="12"
+                                            y1="19"
+                                            x2="12"
+                                            y2="22"
+                                        ></line>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="journey-step fade-in-up">
+                            <div class="journey-content glass-card">
+                                <div class="step-icon">🗺️</div>
+                                <h3>Building the Map</h3>
+                                <p>
+                                    A single echo isn't trustworthy. We collect
+                                    many measurements over time (probabilistic
+                                    evidence accumulation) to increase our
+                                    confidence in a wall's location. Then, we
+                                    use recursive outlier removal to repeatedly
+                                    throw away echoes that don't fit the room's
+                                    geometry, leaving behind a crisp, 2D floor
+                                    plan.
+                                </p>
+                            </div>
+                            <div class="journey-visual">
+                                <div class="visual-badge purple-glow">
+                                    <svg
+                                        width="40"
+                                        height="40"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <polygon
+                                            points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"
+                                        ></polygon>
+                                        <line
+                                            x1="9"
+                                            y1="3"
+                                            x2="9"
+                                            y2="21"
+                                        ></line>
+                                        <line
+                                            x1="15"
+                                            y1="3"
+                                            x2="15"
+                                            y2="21"
+                                        ></line>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="architecture" class="section bg-darker">
+                <div class="container">
+                    <div class="section-header fade-in-up">
+                        <h2>Technical Architecture</h2>
+                        <p>
+                            Built with a modular architecture in Swift,
+                            separating UI, orchestration, audio processing, and
+                            motion tracking.
+                        </p>
+                    </div>
+
+                    <div class="arch-timeline">
+                        <div class="arch-item fade-in-up">
+                            <div class="arch-marker">1</div>
+                            <div class="glass-card arch-content">
+                                <h3>Orchestration (BatMapperViewModel)</h3>
+                                <p>
+                                    The central brain running on the MainActor.
+                                    Orchestrates all subsystems with a
+                                    high-frequency (20Hz) refresh timer to keep
+                                    the SwiftUI interface smooth and reactive.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="arch-item fade-in-up">
+                            <div class="arch-marker">2</div>
+                            <div class="glass-card arch-content">
+                                <h3>Acoustic Subsystem</h3>
+                                <p>
+                                    <strong>ChirpEmitter</strong> loops
+                                    high-frequency chirps using AVAudioPlayer.
+                                    <strong>AudioRecorder</strong> taps the
+                                    microphone at 48kHz, sending audio buffers
+                                    to a background thread.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="arch-item fade-in-up">
+                            <div class="arch-marker">3</div>
+                            <div class="glass-card arch-content">
+                                <h3>Signal Processing</h3>
+                                <p>
+                                    Applies a Butterworth filter, performs
+                                    cross-correlation to match chirps, uses
+                                    Gaussian smoothing to find peaks, and
+                                    calculates distances based on the speed of
+                                    sound.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="arch-item fade-in-up">
+                            <div class="arch-marker">4</div>
+                            <div class="glass-card arch-content">
+                                <h3>Motion & Map Generation</h3>
+                                <p>
+                                    Leverages CMMotionManager for orientation.
+                                    Interleaves user steps with wall coordinates
+                                    to map 2D spaces, and even detects open
+                                    doors from sudden depth increases.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="privacy" class="section">
+                <div class="container">
+                    <div class="privacy-container glass-card fade-in-up">
+                        <div class="privacy-content">
+                            <h2>Privacy First</h2>
+                            <p>
+                                All computation is done completely locally on
+                                your device. The app uses your microphone and
+                                speaker to generate map points in real-time, and
+                                <strong>no data ever leaves your phone</strong>.
+                            </p>
+                            <div class="privacy-features">
+                                <span class="badge badge-success"
+                                    >Local Processing</span
+                                >
+                                <span class="badge badge-success"
+                                    >No Cloud Needed</span
+                                >
+                                <span class="badge badge-success"
+                                    >Open Source</span
+                                >
+                            </div>
+                        </div>
+                        <div class="privacy-icon">🔒</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container footer-container">
+                <p>
+                    Based on the BatMapper paper. Unofficial iOS implementation
+                    by Sulabh Katila.
+                </p>
+                <div class="footer-links">
+                    <a href="https://github.com/sulabhkatila/batmapper"
+                        >GitHub Repository</a
+                    >
+                    <a
+                        href="https://www.researchgate.net/publication/317634120_BatMapper_Acoustic_Sensing_Based_Indoor_Floor_Plan_Construction_Using_Smartphones"
+                        target="_blank"
+                        >Original Paper</a
+                    >
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
