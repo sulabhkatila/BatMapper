@@ -81,7 +81,7 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/BatMapp
 
 - If the object moves, these coordinates change. The change in these coordinates over time is movement.
 
-##### How to map movement (There's a cool name for such process: The DEAD Reckoning) (However, the technique we use here is called SLAM 😴)
+##### How to map movement (There's a cool name for such process: The DEAD Reckoning)
 
 - Imagine user start at some coordinate, eg. **(0, 0)**
 
