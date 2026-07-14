@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/c1da8816-7a73-44a1-add3-b15d1a3c2014
   </tr>
 </table>
 
-Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/batmapper/)
+Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/BatMapper/)
 
 ## How the app works
 
