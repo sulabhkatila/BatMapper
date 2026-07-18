@@ -75,6 +75,11 @@ final class MotionTracker {
     private var doorRQ: [Float] = []
     private let doorWindow: Int = 50
 
+    // Kalman filters for smoothing
+    private let yawFilter = KalmanFilter(q: 0.1, r: 0.1, p: 1.0)
+    private let dCamFilter = KalmanFilter(q: 0.01, r: 0.1, p: 1.0)
+    private let dMicFilter = KalmanFilter(q: 0.01, r: 0.1, p: 1.0)
+
     // Audio recorder reference for getting distances
     weak var audioRecorder: AudioRecorder?
 
@@ -161,6 +166,9 @@ final class MotionTracker {
         micCount = 0
         doorLQ.removeAll()
         doorRQ.removeAll()
+        yawFilter.reset()
+        dCamFilter.reset()
+        dMicFilter.reset()
     }
 
     private func processSensorUpdate() {
@@ -172,11 +180,23 @@ final class MotionTracker {
         // Get yaw in degrees and smooth it
         var rawYaw = Float(motion.attitude.yaw * 180.0 / .pi)
         rawYaw = smoothOrientation(rawYaw)
-        yaw = rawYaw
+        yaw = yawFilter.filter(rawYaw)
 
         // Get current distances from audio recorder
-        let dCam = audioRecorder?.distL ?? 0
-        let dMic = audioRecorder?.distR ?? 0
+        var dCam = audioRecorder?.distL ?? 0
+        var dMic = audioRecorder?.distR ?? 0
+        
+        if dCam != 0 {
+            dCam = dCamFilter.filter(dCam)
+        } else {
+            dCamFilter.reset()
+        }
+        
+        if dMic != 0 {
+            dMic = dMicFilter.filter(dMic)
+        } else {
+            dMicFilter.reset()
+        }
 
         // Update door detection queues
         if doorLQ.count < doorWindow {
@@ -417,5 +437,52 @@ final class MotionTracker {
         }
 
         return mean
+    }
+}
+//
+//  KalmanFilter.swift
+//  MBatmaN
+//
+//  A simple 1D Kalman Filter for smoothing noisy sensor data.
+//
+
+import Foundation
+
+class KalmanFilter {
+    var q: Float // Process noise covariance
+    var r: Float // Measurement noise covariance
+    var x: Float // Value
+    var p: Float // Estimation error covariance
+    var k: Float // Kalman gain
+    var isInitialized: Bool = false
+
+    init(q: Float = 0.01, r: Float = 0.1, p: Float = 0.1) {
+        self.q = q
+        self.r = r
+        self.p = p
+        self.x = 0.0
+        self.k = 0.0
+    }
+
+    func filter(_ measurement: Float) -> Float {
+        if !isInitialized {
+            self.x = measurement
+            self.isInitialized = true
+            return x
+        }
+        // Prediction update
+        p = p + q
+
+        // Measurement update
+        k = p / (p + r)
+        x = x + k * (measurement - x)
+        p = (1 - k) * p
+
+        return x
+    }
+    
+    func reset() {
+        self.isInitialized = false
+        self.x = 0.0
     }
 }
