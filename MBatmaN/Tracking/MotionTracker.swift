@@ -8,7 +8,7 @@
 import Foundation
 import CoreMotion
 
-/// Tracks device motion (orientation + steps) and fuses with acoustic
+/// Tracks device motion (orientation) and fuses with acoustic
 /// distance measurements to generate floor plan points.
 ///
 /// This is a plain class (not ObservableObject). The ViewModel reads
@@ -18,7 +18,6 @@ final class MotionTracker {
     // MARK: - State (read by ViewModel via timer)
 
     var yaw: Float = 0
-    var steps: Int = 0
     var isTracking: Bool = false
 
     // Map data (interleaved [x0, y0, x1, y1, ...])
@@ -38,14 +37,13 @@ final class MotionTracker {
     // MARK: - Private state
 
     private let motionManager = CMMotionManager()
-    private let pedometer = CMPedometer()
     private var timer: Timer?
 
-    // Walking state: track whether user is actively walking
+    // Walking state: track whether user is actively moving
     private var isWalking: Bool = false
     private var walkingTicks: Int = 0
     private var idleTicks: Int = 0
-    private let walkingTimeout: Int = 40  // Stop generating after ~2s of no steps
+    private let walkingTimeout: Int = 40  // Stop generating after ~2s of no movement
 
     // Orientation smoothing state
     private var queueOrientation: [Float] = []
@@ -98,23 +96,6 @@ final class MotionTracker {
             motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical)
         }
 
-        // Start step counting
-        if CMPedometer.isStepCountingAvailable() {
-            pedometer.startUpdates(from: Date()) { [weak self] data, error in
-                guard let self = self, let data = data else { return }
-                DispatchQueue.main.async {
-                    let newSteps = data.numberOfSteps.intValue
-                    if newSteps > self.steps {
-                        self.steps = newSteps
-                        // Signal that the user is actively walking
-                        self.isWalking = true
-                        self.walkingTicks = self.sensorScanRate  // Generate for 1 second per step
-                        self.idleTicks = 0
-                    }
-                }
-            }
-        }
-
         // Main processing timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(sensorScanRate), repeats: true) { [weak self] _ in
             self?.processSensorUpdate()
@@ -127,7 +108,6 @@ final class MotionTracker {
         timer?.invalidate()
         timer = nil
         motionManager.stopDeviceMotionUpdates()
-        pedometer.stopUpdates()
     }
 
     /// Apply loop closure correction.
@@ -142,7 +122,6 @@ final class MotionTracker {
         wallCam.removeAll()
         wallMic.removeAll()
         doors.removeAll()
-        steps = 0
         pointCount = 0
         yaw = 0
         isWalking = false
