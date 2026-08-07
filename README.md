@@ -51,7 +51,6 @@ Also checkout: [Interactive Landing Page](https://sulabhkatila.github.io/BatMapp
     - Accelerometer: Measures how quickly the phone is accelerating in the x, y, and z directions. (Scaling factors for the 3 unit vectors of the acceleration vector.)
     - Gyroscope: Measures how quickly the phone is rotating about the x, y, and z axes. (Scaling factors for the 3 unit vectors of the angular velocity vector.)
         > **Note:** Accelerometers and gyroscopes are not perfect for tracking movement over long periods. Because they measure relative forces rather than absolute position, small measurement errors rapidly accumulate over time—a phenomenon known as "drift"—which causes the mapped path to warp and skew the longer you walk.
-        > (This implementation uses a pedometer but that adds zero value since it doesn't provide real-time metrics (was intended for UI purposes). I will be removing it.)
 
 #### Physics
 
@@ -191,7 +190,7 @@ The core algorithm that translates raw audio into distance measurements. It runs
 
 This module combines the acoustic distances with the user's movement to construct the 2D floor plan.
 
-- **Orientation & Steps**: Uses `CMMotionManager` for device attitude. It includes custom smoothing to detect right-angle turns and snap orientation, compensating for drift. A 1D Kalman filter is additionally applied to smooth the final yaw output.
+- **Orientation & Movement**: Uses `CMMotionManager` for device attitude. It includes custom smoothing to detect right-angle turns and snap orientation, compensating for drift. A 1D Kalman filter is additionally applied to smooth the final yaw output.
 - **Point Generation**: As the user walks, it interleaves their positional trace with the detected left and right wall coordinates (derived from the audio distance and current yaw). Incoming acoustic distance measurements are also processed through independent 1D Kalman filters to mitigate jitter and environmental noise before generating the map geometry.
 - **Door Detection**: Monitors the history of wall distances. Sudden, temporary increases in depth (recesses) are classified as open doors and marked distinctively on the map.
 - **Loop Closure Correction**: A user-triggered algorithm that assumes the final coordinate should match the origin `(0,0)`. It calculates the terminal drift error and linearly distributes it backwards across all historical `trace`, `wallCam`, and `wallMic` arrays to retroactively perfectly correct the map geometry.

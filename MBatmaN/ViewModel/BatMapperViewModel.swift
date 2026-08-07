@@ -21,7 +21,6 @@ final class BatMapperViewModel: ObservableObject {
     // MARK: - Published State
 
     @Published var isScanning: Bool = false
-    @Published var stepCount: Int = 0
     @Published var yaw: Float = 0
     @Published var distL: Float = 0
     @Published var distR: Float = 0
@@ -136,7 +135,6 @@ final class BatMapperViewModel: ObservableObject {
         wallMic.removeAll()
         doors.removeAll()
         pointCount = 0
-        stepCount = 0
     }
 
     // MARK: - Data Sync
@@ -146,7 +144,6 @@ final class BatMapperViewModel: ObservableObject {
     private func syncData() {
         // Sync scalar values
         yaw = motionTracker.yaw
-        stepCount = motionTracker.steps
         distL = audioRecorder.distL
         distR = audioRecorder.distR
         pointCount = motionTracker.pointCount

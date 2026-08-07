@@ -205,13 +205,6 @@ struct ContentView: View {
       )
 
       sensorCard(
-        icon: "figure.walk",
-        label: "STEPS",
-        value: "\(viewModel.stepCount)",
-        color: .green
-      )
-
-      sensorCard(
         icon: "arrow.left.to.line",
         label: "DIST L",
         value: String(format: "%.2fm", viewModel.distL),
